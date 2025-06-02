@@ -3,7 +3,7 @@
 # CIS_RHEL_9_Audit.sh
 # Version: 1.0
 # Author: Jason Callen
-# Description: Audits RHEL 9 system for CIS Level 1 compliance
+# Description: Audits RHEL 9 system for CIS Level 1 Automated compliance
 # Date: 2025-06-01
 
 PASS_COUNT=0
