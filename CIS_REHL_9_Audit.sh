@@ -493,7 +493,7 @@ check_mac_truncated_64_not_used() {
     local policy_file="/etc/crypto-policies/state/CURRENT.pol"
 
     if grep -Pi -- '^\h*mac\h*=\h*([^#\n\r]+)?-64\b' "$policy_file" > /dev/null 2>&1; then
-        log_fail "Truncated 64-bit MACs are used in crypto policy (non-compliant)"
+        log_fail "Truncated 64-bit MACs ARE used in crypto policy (non-compliant)"
     else
         log_pass "No truncated 64-bit MACs found in crypto policy (compliant)"
     fi
@@ -521,7 +521,7 @@ check_cbc_policy(){
    else 
       echo -e "\n- Audit Result:\n  ** FAIL **\n - Reason(s) for audit failure:\n$l_output2\n" 
       [ -n "$l_output" ] && echo -e "\n- Correctly set:\n$l_output\n"
-      log_fail "CBC enabled for SSH"
+      log_fail "CBC ENABLED for SSH"
    fi 
 }
 
@@ -548,7 +548,7 @@ check_motd(){
       log_pass "message of the day properly configured"
    else 
       echo -e "\n- Audit Result:\n  ** FAIL **\n - Reason(s) for audit failure:\n$l_output2\n"
-      log_fail "message of the day imporperly configured"
+      log_fail "message of the day IMPROPERLY configured"
    fi 
 }
 
@@ -559,7 +559,7 @@ check_banner_for_os_info() {
     os_id=$(grep '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
 
     if grep -E -i "(\\\v|\\\r|\\\m|\\\s|\\b$os_id\\b)" "$target_file" > /dev/null 2>&1; then
-        log_fail "$target_file contains system information (escape sequences or OS ID: $os_id)"
+        log_fail "$target_file CONTAINS system information (escape sequences or OS ID: $os_id)"
     else
         log_pass "$target_file does not contain system information (compliant)"
     fi
@@ -1153,7 +1153,7 @@ check_chrony_servers_configured() {
     if [ "$found" -eq 1 ]; then
         log_pass "Chrony time sources (server or pool) are configured"
     else
-        log_fail "No chrony time sources (server or pool) found in configuration"
+        log_fail "NO chrony time sources (server or pool) found in configuration"
     fi
 }
 
@@ -2157,7 +2157,7 @@ check_sshd_max_sessions() {
     if [ -n "$config_matches" ]; then
         l_output2+="\n - Found invalid MaxSessions settings in config:\n$config_matches"
         config_issue=1
-        log_fail "One or more SSH configuration files set MaxSessions to a value greater than 10"
+        log_fail "One or more SSH configuration files SET MaxSessions to a value greater than 10"
     else
         l_output+="\n - No invalid MaxSessions values found in sshd configuration files"
     fi
@@ -2483,7 +2483,7 @@ check_pam_modules_in_authselect() {
 
     if [ -z "$profile_path" ]; then
         l_output2+="\n - File /etc/authselect/authselect.conf is missing or empty"
-        log_fail "Unable to determine active authselect profile from /etc/authselect/authselect.conf"
+        log_fail "Unable to determine active authselect profile FROM /etc/authselect/authselect.conf"
     else
         modules_found=$(grep -P -- '\b(pam_pwquality\.so|pam_pwhistory\.so|pam_faillock\.so|pam_unix\.so)\b' \
             /etc/authselect/"$profile_path"/{system,password}-auth 2>/dev/null)
@@ -3261,7 +3261,7 @@ check_future_password_changes() {
     if [[ -z "$l_output" ]]; then
         log_pass "No user accounts have password change dates in the future"
     else
-        log_fail "One or more accounts have password change dates in the future"
+        log_fail "One or more accounts HAVE password change dates in the future"
         echo -e "$l_output"
     fi
 }
@@ -3277,7 +3277,7 @@ check_uid_0_users() {
     if [[ "$l_uid0_users" == "root" ]]; then
         log_pass "Only 'root' has UID 0"
     else
-        log_fail "**NOT** only 'root' has UID 0"
+        log_fail "NOT only 'root' has UID 0"
         echo -e " - UID 0 users found:\n$(echo "$l_uid0_users" | grep -v '^root$')"
     fi
 }
@@ -3293,7 +3293,7 @@ check_gid_0_users() {
     if [[ "$l_gid0_users" == "root:0" ]]; then
         log_pass "Only 'root' has GID 0 (excluding sync/shutdown/halt/operator)"
     else
-        log_fail "**NOT** only 'root' has GID 0"
+        log_fail "NOT only 'root' has GID 0"
         echo -e " - GID 0 users found:\n$l_gid0_users"
     fi
 }
@@ -3309,7 +3309,7 @@ check_gid_0_group() {
     if [[ "$l_gid0_groups" == "root:0" ]]; then
         log_pass "Only 'root' group has GID 0"
     else
-        log_fail "**NOT** only 'root' group has GID 0"
+        log_fail "NOT only 'root' group has GID 0"
         echo -e " - GID 0 groups found:\n$l_gid0_groups"
     fi
 }
@@ -3325,7 +3325,7 @@ check_root_password_or_locked() {
     elif [[ "$l_status" =~ ^root\ L ]]; then
         log_pass "Root account is locked"
     else
-        log_fail "**NOT** compliant: root password is neither set nor account locked"
+        log_fail "NOT compliant: root password is neither set nor account locked"
         echo " - passwd -S root returned: $l_status"
     fi
 }
@@ -3371,7 +3371,7 @@ check_root_path_safety() {
     if [ -z "$l_output2" ]; then
         log_pass "Root's PATH is correctly configured"
     else
-        log_fail "**NOT** compliant: Issues found in root's PATH"
+        log_fail "NOT compliant: Issues found in root's PATH"
         echo -e "$l_output2"
     fi
 }
@@ -3386,7 +3386,7 @@ check_root_umask() {
     if [ -z "$result" ]; then
         log_pass "Root umask is compliant: enforces 027 or stricter (dir 750, file 640)"
     else
-        log_fail "Root umask **IS** misconfigured or overly permissive"
+        log_fail "Root umask IS misconfigured or overly permissive"
         echo -e "$result"
     fi
 }
@@ -3406,7 +3406,7 @@ check_system_account_shells() {
     if [ -z "$l_output" ]; then
         log_pass "All system accounts have non-login shells"
     else
-        log_fail "One or more system accounts **HAVE** valid login shells"
+        log_fail "One or more system accounts HAVE valid login shells"
         echo -e "$l_output"
     fi
 }
@@ -3426,7 +3426,7 @@ check_nonroot_shell_lock_status() {
     if [ -z "$l_output" ]; then
         log_pass "All non-root accounts without valid shells are locked"
     else
-        log_fail "Some non-root accounts **WITHOUT** valid shells are **NOT** locked"
+        log_fail "Some non-root accounts without valid shells are NOT locked"
         echo -e "$l_output"
     fi
 }
@@ -3482,7 +3482,7 @@ check_tmout_configuration() {
         log_pass "TMOUT is correctly configured"
         printf '%s\n' "${a_output[@]}"
     else
-        log_fail "TMOUT **IS NOT** properly configured"
+        log_fail "TMOUT IS NOT properly configured"
         printf '%s\n' "${a_output2[@]}"
         if [ ${#a_output[@]} -gt 0 ]; then
             echo ""
@@ -3531,7 +3531,7 @@ check_default_user_umask() {
         log_pass "Default user umask is correctly configured"
         echo -e "$l_output\n$l_output1"
     else
-        log_fail "Default user umask **IS NOT** correctly configured"
+        log_fail "Default user umask IS NOT correctly configured"
         echo -e "$l_output2"
         [ -n "$l_output" ] && echo -e "\n- * Correctly configured *:\n$l_output\n"
     fi
@@ -3556,7 +3556,7 @@ check_aide_scheduled() {
         log_pass "AIDE check is scheduled via systemd timer"
         echo -e "aidecheck.service: $l_service_enabled\naidecheck.timer: $l_timer_enabled ($l_timer_active)"
     else
-        log_fail "AIDE check **IS NOT** properly scheduled"
+        log_fail "AIDE check IS NOT properly scheduled"
         echo -e "Cron entries: ${l_cron_aide:-None Found}"
         echo -e "Systemd status:\n - aidecheck.service: $l_service_enabled\n - aidecheck.timer: $l_timer_enabled ($l_timer_active)"
     fi
@@ -3864,21 +3864,21 @@ audit_rsyslog_no_remote_logs() {
 
     # Advanced format checks
     if grep -Psiq -- '^\h*module\(load=\"?imtcp\"?\)' $l_files 2>/dev/null; then
-        log_fail "Advanced rsyslog config enables TCP listener via module(load=\"imtcp\")"
+        log_fail "Advanced rsyslog config ENABLES TCP listener via module(load=\"imtcp\")"
         l_fail=1
     fi
     if grep -Psiq -- '^\h*input\(type=\"?imtcp\"?' $l_files 2>/dev/null; then
-        log_fail "Advanced rsyslog config enables TCP input via input(type=\"imtcp\")"
+        log_fail "Advanced rsyslog config ENABLES TCP input via input(type=\"imtcp\")"
         l_fail=1
     fi
 
     # Obsolete legacy format checks
     if grep -Psiq -- '^\h*\$ModLoad\h+imtcp\b' $l_files 2>/dev/null; then
-        log_fail "Legacy rsyslog config loads imtcp module via \$ModLoad imtcp"
+        log_fail "Legacy rsyslog config LOADS imtcp module via \$ModLoad imtcp"
         l_fail=1
     fi
     if grep -Psiq -- '^\h*\$InputTCPServerRun\b' $l_files 2>/dev/null; then
-        log_fail "Legacy rsyslog config enables TCP server via \$InputTCPServerRun"
+        log_fail "Legacy rsyslog config ENABLES TCP server via \$InputTCPServerRun"
         l_fail=1
     fi
 
@@ -4009,7 +4009,7 @@ audit_file_perms_ownership() {
     if [[ "$actual_mode" -le "$expected_mode" && "$actual_uid" -eq "$expected_uid" && "$actual_gid" -eq "$expected_gid" ]]; then
         log_pass "$file_path permissions are $actual_mode and owned by $actual_uid_name:$actual_gid_name"
     else
-        log_fail "$file_path has incorrect settings - Mode: $actual_mode (expected: $expected_mode), UID: $actual_uid_name/$actual_uid (expected: $expected_uid), GID: $actual_gid_name/$actual_gid (expected: $expected_gid)"
+        log_fail "$file_path HAS incorrect settings - Mode: $actual_mode (expected: $expected_mode), UID: $actual_uid_name/$actual_uid (expected: $expected_uid), GID: $actual_gid_name/$actual_gid (expected: $expected_gid)"
     fi
 }
 
@@ -4052,7 +4052,7 @@ check_world_writable_files_and_dirs() {
         log_pass "No world-writable files or directories without sticky bit found"
         printf "%b\n" "$l_output"
     else
-        log_fail "World-writable items found without sticky bit or incorrect configuration"
+        log_fail "World-writable items FOUND without sticky bit or incorrect configuration"
         printf "%b\n" "$l_output2"
         [ -n "$l_output" ] && printf "%b\n" "$l_output"
     fi
@@ -4095,7 +4095,7 @@ check_nouser_nogroup_files() {
         log_pass "No unowned or ungrouped files or directories found"
         printf "%b\n" "$l_output"
     else
-        log_fail "Unowned or ungrouped files/directories were found"
+        log_fail "Unowned or ungrouped files/directories WERE found"
         printf "%b\n" "$l_output2"
         [ -n "$l_output" ] && printf "%b\n" "$l_output"
     fi
@@ -4178,7 +4178,7 @@ check_duplicate_uids() {
     if [ -z "$l_output2" ]; then
         log_pass "No duplicate UIDs found in /etc/passwd"
     else
-        log_fail "Duplicate UIDs found in /etc/passwd"
+        log_fail "Duplicate UIDs FOUND in /etc/passwd"
         printf "%b\n" "$l_output2"
     fi
 }
@@ -4199,7 +4199,7 @@ check_duplicate_gids() {
     if [ -z "$l_output2" ]; then
         log_pass "No duplicate GIDs found in /etc/group"
     else
-        log_fail "Duplicate GIDs found in /etc/group"
+        log_fail "Duplicate GIDs FOUND in /etc/group"
         printf "%b\n" "$l_output2"
     fi
 }
@@ -4220,7 +4220,7 @@ check_duplicate_usernames() {
     if [ -z "$l_output2" ]; then
         log_pass "No duplicate usernames found in /etc/passwd"
     else
-        log_fail "Duplicate usernames found in /etc/passwd"
+        log_fail "Duplicate usernames FOUND in /etc/passwd"
         printf "%b\n" "$l_output2"
     fi
 }
@@ -4241,7 +4241,7 @@ check_duplicate_groupnames() {
     if [ -z "$l_output2" ]; then
         log_pass "No duplicate group names found in /etc/group"
     else
-        log_fail "Duplicate group names found in /etc/group"
+        log_fail "Duplicate group names FOUND in /etc/group"
         printf "%b\n" "$l_output2"
     fi
 }
