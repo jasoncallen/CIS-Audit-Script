@@ -114,7 +114,7 @@ check_mount_and_options() {
     if [ ${#missing_opts[@]} -eq 0 ]; then
         log_pass "$mount_point is mounted with required options: nodev, nosuid, noexec"
     else
-        log_fail "$mount_point is mounted but missing: ${missing_opts[*]}"
+        log_fail "$mount_point is mounted BUT missing: ${missing_opts[*]}"
     fi
 }
 
@@ -155,10 +155,10 @@ check_selinuxtype() {
         if [[ "$loaded_policy" == "targeted" || "$loaded_policy" == "mls" ]]; then
             log_pass "SELINUXTYPE is set to '$loaded_policy' and policy is properly loaded"
         else
-            log_fail "SELINUXTYPE is set to targeted/mls in config but loaded policy is '$loaded_policy'"
+            log_fail "SELINUXTYPE is set to targeted/mls in config BUT loaded policy is '$loaded_policy'"
         fi
     else
-        log_fail "SELINUXTYPE is not set to targeted or mls in /etc/selinux/config"
+        log_fail "SELINUXTYPE is NOT set to targeted or mls in /etc/selinux/config"
     fi
 }
 
@@ -173,7 +173,7 @@ check_selinux_mode() {
         if [[ "$runtime_mode" == "$config_mode" ]]; then
             log_pass "SELinux config mode ($config_mode) matches runtime mode ($runtime_mode)"
         else
-            log_fail "Mismatch: SELinux config mode is '$config_mode' but runtime is '$runtime_mode'"
+            log_fail "Mismatch: SELinux config mode is '$config_mode' BUT runtime is '$runtime_mode'"
         fi
     else
         log_fail "SELinux config is NOT set to enforcing or permissive (found: '$config_mode')"
@@ -184,7 +184,7 @@ check_selinux_tools_not_installed() {
     local package="$1"
     print_header "1.3.1.4 - Ensure '$package' the is not installed"
     if rpm -q "$package"; then
-      log_fail "$package is installed"
+      log_fail "$package IS installed"
     else
       log_pass "$package is not installed (compliant)"
     fi
@@ -199,10 +199,10 @@ check_grub_password_set() {
         if grep -q '^GRUB2_PASSWORD=' "$grub_password_file"; then
             log_pass "GRUB2 password is set in $grub_password_file"
         else
-            log_fail "GRUB2 password file exists but no password entry found"
+            log_fail "GRUB2 password file exists BUT no password entry found"
         fi
     else
-        log_fail "No non-empty user.cfg file found in /boot (GRUB2 password likely not set)"
+        log_fail "NO non-empty user.cfg file found in /boot (GRUB2 password likely not set)"
     fi
 }
 
@@ -3623,7 +3623,7 @@ check_aide_audit_tool_integrity() {
       done <<< "${tool_to_file[$tool]}"
     else
       has_fail=1
-      log_fail "AIDE configuration is missing entry for '$tool'"
+      log_fail "AIDE configuration IS missing entry for '$tool'"
     fi
   done
 
@@ -3986,7 +3986,7 @@ audit_file_perms_ownership() {
     print_header "7.1.1 Ensure permissions on $file_path are configured"
 
     if [ ! -e "$file_path" ]; then
-        log_fail "$file_path does not exist"
+        log_fail "$file_path DOES NOT exist"
         return
     fi
 
@@ -4289,7 +4289,7 @@ check_local_user_home_dirs() {
         log_pass "All local interactive user home directories are secure"
         printf "%b\n" "$l_output"
     else
-        log_fail "Some local interactive user home directories are misconfigured"
+        log_fail "Some local interactive user home directories ARE misconfigured"
         printf "%b\n" "$l_output2"
         [ -n "$l_output" ] && printf "\n- * Correctly configured * :\n%b\n" "$l_output"
     fi
