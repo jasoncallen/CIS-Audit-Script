@@ -2,8 +2,8 @@
 PASS_COUNT=0
 FAIL_COUNT=0
 log_pass() { ((PASS_COUNT++)); echo -e "[PASS]   $1" | tee -a "$OUTPUT_FILE"; }
-log_fail() { ((FAIL_COUNT++)); echo -e "[FAIL]   $1" | tee -a "$OUTPUT_FILE" | tee -a "$FAIL_REPORT"; }
-log_note()   { echo "        - $1"; }
+log_fail() { ((FAIL_COUNT++)); echo -e "[FAIL]   $1" | tee -a "$FAIL_REPORT"; }
+log_note() { echo "        - $1"; }
 OUTPUT_FILE="cis_level1_report_rhel.txt"
 > "$OUTPUT_FILE"
 FAIL_REPORT="cis_level1_failed_report_rhel.txt"
@@ -548,7 +548,7 @@ check_motd(){
 check_banner_for_os_info() {
     local target_file="$1"
     local os_id
-    print_header "1.7.# - Ensure login warning banner is configured properly"
+    print_header "1.7.X - Ensure login warning banner is configured properly"
     os_id=$(grep '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
 
     if grep -E -i "(\\\v|\\\r|\\\m|\\\s|\\b$os_id\\b)" "$target_file" > /dev/null 2>&1; then
@@ -560,7 +560,7 @@ check_banner_for_os_info() {
 
 check_banner_file_permissions() {
     local file="$1"
-    print_header "1.7.# - Ensure access to $file is configured"
+    print_header "1.7.X - Ensure access to $file is configured"
 
     if [ -e "$file" ]; then
         local mode uid user gid group
