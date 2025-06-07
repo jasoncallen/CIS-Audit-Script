@@ -9,7 +9,7 @@
 PASS_COUNT=0
 FAIL_COUNT=0
 log_pass() { ((PASS_COUNT++)); echo -e "[PASS]   $1" | tee -a "$OUTPUT_FILE"; }
-log_fail() { ((FAIL_COUNT++)); echo -e "[FAIL]   $1" | tee -a "$FAIL_REPORT"; }
+log_fail() { ((FAIL_COUNT++)); echo -e "[FAIL]   $1" | tee -a "$OUTPUT_FILE" | tee -a "$FAIL_REPORT"; }
 log_note() { echo "        - $1"; }
 OUTPUT_FILE="cis_level1_report_rhel.txt"
 > "$OUTPUT_FILE"
