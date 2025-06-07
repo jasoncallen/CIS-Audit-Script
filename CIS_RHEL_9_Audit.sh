@@ -4551,9 +4551,11 @@ main(){
     "net.ipv6.conf.all.accept_ra=0" \
     "net.ipv6.conf.default.accept_ra 0"
 
-  print_header "4.3 Configure NFTables"
+  print_header "4.1 Configure a firewall utility"
   check_package_installed "nftables"
   check_firewall_status
+
+  print_header "4.3 Configure NFTables"
   check_nftables_base_chains
   check_nftables_default_drop_policy
   check_nftables_loopback_traffic
