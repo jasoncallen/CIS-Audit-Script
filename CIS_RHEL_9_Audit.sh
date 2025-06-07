@@ -703,7 +703,8 @@ ensure_gdm_disable_user_list_enabled(){
          log_fail "gdm disable-user-list option is NOT enabled"
       fi 
    else 
-      echo -e "\n\n - GNOME Desktop Manager isn't installed\n - Recommendation is Not Applicable\n- Audit result:\n  *** PASS ***\n" 
+      echo -e "\n\n - GNOME Desktop Manager isn't installed\n - Recommendation is Not Applicable\n- Audit result:\n  *** PASS ***\n"
+      log_pass "gdm is not installed"
    fi 
 }
 
