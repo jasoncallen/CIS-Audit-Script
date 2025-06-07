@@ -2286,7 +2286,7 @@ check_sshd_use_pam() {
 }
 
 check_sudo_installed() {
-    print_header "5.3.1 - Ensure 'sudo' is installed"
+    print_header "5.2.1 - Ensure 'sudo' is installed"
 
     local l_output="" l_output2=""
     local sudo_status
