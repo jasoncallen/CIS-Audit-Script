@@ -3395,21 +3395,21 @@ check_root_umask() {
 check_system_account_shells() {
     print_header "5.4.2.7 - Ensure system accounts do not have a valid login shell"
 
-    local l_valid_shells l_output
-    l_valid_shells="^($(awk -F/ '$NF != "nologin" {print}' /etc/shells | sed -rn '/^\//{s,/,\\/,g;p}' | paste -s -d '|' -))$"
+    l_valid_shells="^($(awk -F\/ '$NF != "nologin" {print}' /etc/shells | sed -rn '/^\//{s,/,\\\\/,g;p}' | paste -s -d '|' -))$"
+    fail_count=0
 
-    l_output=$(awk -v pat="$l_valid_shells" -F: '
-        ($1 !~ /^(root|halt|sync|shutdown|nfsnobody)$/ &&
-        ($3 < '"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' || $3 == 65534) &&
-        $7 ~ pat)
-        {print "Service account: \"" $1 "\" has a valid shell: " $7}' /etc/passwd)
+    while IFS= read -r l_user; do
+      output=$(passwd -S "$l_user" | awk '$2 !~ /^L/ {print "Account: \"" $1 "\" does NOT have a valid login shell and is NOT locked"}')
+      if [[ -n "$output" ]]; then
+        log_fail "[FAIL] $output"
+        ((fail_count++))
+      fi
+    done < <(awk -v pat="$l_valid_shells" -F: '($1 != "root" && $(NF) !~ pat) {print $1}' /etc/passwd)
 
-    if [ -z "$l_output" ]; then
-        log_pass "All system accounts have non-login shells"
-    else
-        log_fail "One or more system accounts HAVE valid login shells"
-        echo -e "$l_output"
+    if [[ $fail_count -eq 0 ]]; then
+      log_pass "All non-root accounts with invalid shells are locked"
     fi
+
 }
 
 check_nonroot_shell_lock_status() {
