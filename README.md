@@ -8,7 +8,8 @@ The script is designed for **read-only auditing** and produces a report showing 
 
 ## Features
 
-- Implements checks aligned with the [CIS RHEL 9 Benchmark v2.0.0 – Level 1](https://www.cisecurity.org/benchmark/red_hat_linux).
+- Implements checks aligned with the [CIS RHEL 9 Benchmark v2.0.0](https://www.cisecurity.org/benchmark/red_hat_linux).
+- Only processes Levvel 1 Automated checks.
 - Clean output with standardized `[PASS]` and `[FAIL]` messages.
 - Results include:
   - Section headers (e.g., `1.1.1 – Disable unused filesystems`)
