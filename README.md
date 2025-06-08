@@ -86,7 +86,6 @@ This script is provided under the [MIT License](LICENSE). It is intended for int
 ## Author
 
 - Maintained by: Jason Callen
-- Contact: [your-email@example.com]
 
 ## Contributions
 
